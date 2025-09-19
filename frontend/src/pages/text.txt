@@ -1,0 +1,124 @@
+import { Link } from "react-router-dom";
+
+export default function LandingPage() {
+    return (
+      <div className="font-sans bg-white text-gray-900">
+        {/* Navbar */}
+        <header className="fixed top-2 left-0 right-0 flex justify-between items-center px-10 py-6 border border-gray-300 rounded-lg mx-20 bg-white">
+          <h1 className="text-2xl font-bold">Renu Thread & Brush Arts</h1>
+          <nav className="hidden md:flex space-x-8 text-gray-600">
+            <a href="#courses" className="hover:text-black">Courses</a>
+            <a href="#about" className="hover:text-black">About</a>
+            <a href="#testimonials" className="hover:text-black">Testimonials</a>
+            <a href="#contact" className="hover:text-black">Contact</a>
+          </nav>
+          <Link to="/login" className="px-6 py-2 border rounded-full hover:bg-gray 100">Login</Link>
+        </header>
+  
+        {/* Hero */}
+        <section className="text-center max-w-3xl mx-auto py-60">
+          <h2 className="text-5xl md:text-6xl font-bold leading-tight">
+            Where Creativity Meets Fashion & Art
+          </h2>
+          <p className="text-gray-600 mt-6 text-lg">
+            Learn Fashion Designing, Tanjore Painting, Mural Art & More — anytime, anywhere.
+          </p>
+          <div className="flex justify-center gap-6 mt-10">
+            <button className="px-8 py-3 bg-black text-white rounded-full hover:opacity-90">
+              Explore Courses
+            </button>
+            <button className="px-8 py-3 border rounded-full hover:bg-gray-100">
+              Contact Us
+            </button>
+          </div>
+        </section>
+  
+        {/* Courses Grid */}
+        <section id="courses" className="px-10 py-20">
+          <h3 className="text-4xl font-bold mb-12 text-center">Our Courses</h3>
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+            {[
+              { title: "Fashion Designing", img: "https://source.unsplash.com/400x400/?fashion" },
+              { title: "Tanjore Painting", img: "https://source.unsplash.com/400x400/?painting" },
+              { title: "Mural Art", img: "https://source.unsplash.com/400x400/?art" },
+              { title: "10 Kurta Designs", img: "https://source.unsplash.com/400x400/?fabric" },
+            ].map((course, idx) => (
+              <div
+                key={idx}
+                className="rounded-2xl overflow-hidden shadow-md hover:shadow-xl transition"
+              >
+                <img src={course.img} alt={course.title} className="h-56 w-full object-cover" />
+                <div className="p-6">
+                  <h4 className="font-semibold text-lg">{course.title}</h4>
+                  <p className="text-sm text-gray-600 mt-2">
+                    Step-by-step classes with hands-on projects.
+                  </p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </section>
+  
+        {/* Story Section */}
+        <section className="px-10 py-20 grid md:grid-cols-2 gap-12 items-center">
+          <img
+            src="https://source.unsplash.com/600x600/?creative,design"
+            alt="Creativity"
+            className="rounded-3xl shadow-lg"
+          />
+          <div>
+            <h3 className="text-4xl font-bold mb-6">Transform Your Creativity</h3>
+            <p className="text-gray-600 mb-6">
+              With recorded + live classes, we make learning accessible and fun.
+              Learn traditional and modern arts from an experienced instructor.
+            </p>
+            <button className="px-8 py-3 bg-black text-white rounded-full hover:opacity-90">
+              Start Learning
+            </button>
+          </div>
+        </section>
+  
+        {/* Testimonials */}
+        <section id="testimonials" className="px-10 py-20 bg-gray-50">
+          <h3 className="text-4xl font-bold text-center mb-12">What Students Say</h3>
+          <div className="grid md:grid-cols-3 gap-8">
+            {[
+              { name: "Priya S.", text: "The fashion course gave me confidence to start my boutique!" },
+              { name: "Ankit R.", text: "Mural painting sessions were so engaging and relaxing." },
+              { name: "Meena L.", text: "Loved the Kurta course, very practical and beautifully explained." },
+            ].map((t, idx) => (
+              <div
+                key={idx}
+                className="rounded-2xl bg-white shadow-md p-8 hover:shadow-xl transition"
+              >
+                <p className="italic text-gray-700">“{t.text}”</p>
+                <p className="mt-6 font-semibold">{t.name}</p>
+              </div>
+            ))}
+          </div>
+        </section>
+  
+        {/* CTA Section */}
+        <section className="text-center py-20">
+          <h3 className="text-4xl font-bold">Ready to Begin Your Journey?</h3>
+          <p className="text-gray-600 mt-4 mb-8">Join hundreds of students learning with us.</p>
+          <button className="px-10 py-4 bg-pink-600 text-white rounded-full text-lg hover:bg-pink-700 shadow-lg">
+            Join Now
+          </button>
+        </section>
+  
+        {/* Footer */}
+        <footer className="px-10 py-10 border-t text-gray-600 text-sm">
+          <div className="flex justify-between flex-col md:flex-row gap-6">
+            <p>© 2025 Renu Thread & Brush Arts. All rights reserved.</p>
+            <div className="flex gap-6">
+              <a href="#">Instagram</a>
+              <a href="#">Facebook</a>
+              <a href="#">YouTube</a>
+            </div>
+          </div>
+        </footer>
+      </div>
+    );
+  }
+  
