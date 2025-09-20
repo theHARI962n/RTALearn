@@ -6,4 +6,4 @@ Building in Progress....
 
 ## Screenshots
 
-![LandingPage](public/UI1.png)
+![LandingPage](frontend/public/UI1.png)
