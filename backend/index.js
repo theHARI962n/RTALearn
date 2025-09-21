@@ -4,6 +4,10 @@ import dotenv from "dotenv";
 import cors from "cors";
 import authRoutes from "./routes/authRoutes.js";
 import courseRoutes from "./routes/courseRoutes.js";
+import videoRoutes from "./routes/videoRoutes.js";
+import attendanceRoutes from "./routes/attendanceRoutes.js";
+import notificationRoutes from "./routes/notificationRoutes.js";
+import profileRoutes from "./routes/profileRoutes.js";
 
 dotenv.config();
 
@@ -17,6 +21,11 @@ app.use(cors());
 // Routes
 app.use("/api/auth", authRoutes);
 app.use("/api/courses", courseRoutes);
+app.use("/api/videos", videoRoutes);
+app.use("/api/attendance", attendanceRoutes);
+app.use("/api/notifications", notificationRoutes);
+app.use("/api/profile", profileRoutes);
+
 
 // Simple test route
 app.get("/", (req, res) => {
