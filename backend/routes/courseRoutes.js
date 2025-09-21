@@ -1,0 +1,25 @@
+import express from "express";
+import {
+  createCourse,
+  getCourses,
+  joinCourse,
+  removeStudent,
+} from "../controllers/courseController.js";
+
+import { protect, adminOnly, studentOnly } from "../middleware/authMiddleware.js";
+
+const router = express.Router();
+
+// Admin: Create course
+router.post("/", protect, adminOnly, createCourse);
+
+// Any user: View all courses
+router.get("/", protect, getCourses);
+
+// Student: Join a course by code
+router.post("/join/:code", protect, studentOnly, joinCourse);
+
+// Admin: Remove student from course
+router.delete("/:courseId/remove/:studentId", protect, adminOnly, removeStudent);
+
+export default router;
