@@ -3,6 +3,7 @@ An E learning Platform for an online business.To scale and help track attendance
 This is a Freelance Project. (Posting With Clients Permission only)
 
 Building in Progress....
+(As of now Frontend 3/4th and backend API's have been built)
 
 ## Features:
 - Role Based Authentication
