@@ -1,22 +1,16 @@
 pipeline {
-    agent any
-
-    environment {
-        NODE_VERSION = '18'  // Node version to use
+    agent {
+        docker {
+            image 'node:18'
+            args '-u root:root'
+        }
     }
 
     stages {
 
-        stage('Install Node.js') {
-            steps {
-                echo "Using Node.js version ${env.NODE_VERSION}"
-                sh 'node -v'
-            }
-        }
-
         stage('Backend Build & Test') {
             steps {
-                dir('backend') { // change if your backend folder name is different
+                dir('backend') {
                     echo "Installing backend dependencies..."
                     sh 'npm install'
                     echo "Running backend tests..."
@@ -27,7 +21,7 @@ pipeline {
 
         stage('Frontend Build & Test') {
             steps {
-                dir('frontend') { // change if your frontend folder name is different
+                dir('frontend') {
                     echo "Installing frontend dependencies..."
                     sh 'npm install'
                     echo "Building frontend..."
