@@ -1,37 +1,47 @@
 pipeline {
     agent any
 
+    environment {
+        REPO_DIR = "${WORKSPACE}" // Jenkins workspace
+    }
+
     stages {
+        stage('Checkout') {
+            steps {
+                git branch: 'main', url: 'https://github.com/theHARI962n/RTALearn.git'
+            }
+        }
+
         stage('Backend Build & Test') {
             steps {
-                dir('backend') {
-                    echo "Backend: Node version"
-                    sh 'node -v'
-                    echo "Backend: Installing dependencies"
-                    sh 'npm install'
-                    echo "Backend: Running tests"
-                    sh 'npm test || echo "No backend tests found"'
-                }
+                echo "Backend: Building with Docker Node container"
+                sh """
+                docker run --rm -v $REPO_DIR/backend:/app -w /app node:18 \
+                bash -c "npm install && npm run test"
+                """
             }
         }
 
         stage('Frontend Build & Test') {
             steps {
-                dir('frontend') {
-                    echo "Frontend: Node version"
-                    sh 'node -v'
-                    echo "Frontend: Installing dependencies"
-                    sh 'npm install'
-                    echo "Frontend: Building project"
-                    sh 'npm run build || echo "No frontend build script"'
-                }
+                echo "Frontend: Building with Docker Node container"
+                sh """
+                docker run --rm -v $REPO_DIR/frontend:/app -w /app node:18 \
+                bash -c "npm install && npm run build"
+                """
             }
         }
     }
 
     post {
         always {
-            echo 'Pipeline finished!'
+            echo "CI Pipeline finished"
+        }
+        success {
+            echo "Build succeeded!"
+        }
+        failure {
+            echo "Build failed!"
         }
     }
 }
