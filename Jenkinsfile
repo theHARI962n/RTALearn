@@ -1,19 +1,15 @@
 pipeline {
-    agent {
-        docker {
-            image 'node:18'
-            args '-u root:root'
-        }
-    }
+    agent any
 
     stages {
-
         stage('Backend Build & Test') {
             steps {
                 dir('backend') {
-                    echo "Installing backend dependencies..."
+                    echo "Backend: Node version"
+                    sh 'node -v'
+                    echo "Backend: Installing dependencies"
                     sh 'npm install'
-                    echo "Running backend tests..."
+                    echo "Backend: Running tests"
                     sh 'npm test || echo "No backend tests found"'
                 }
             }
@@ -22,9 +18,11 @@ pipeline {
         stage('Frontend Build & Test') {
             steps {
                 dir('frontend') {
-                    echo "Installing frontend dependencies..."
+                    echo "Frontend: Node version"
+                    sh 'node -v'
+                    echo "Frontend: Installing dependencies"
                     sh 'npm install'
-                    echo "Building frontend..."
+                    echo "Frontend: Building project"
                     sh 'npm run build || echo "No frontend build script"'
                 }
             }
