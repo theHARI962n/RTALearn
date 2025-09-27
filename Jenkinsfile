@@ -2,46 +2,58 @@ pipeline {
     agent any
 
     environment {
-        REPO_DIR = "${WORKSPACE}" // Jenkins workspace
+        FRONTEND_DIR = "frontend"
+        BACKEND_DIR  = "backend"
     }
 
     stages {
-        stage('Checkout') {
+        stage('Checkout Code') {
             steps {
                 git branch: 'main', url: 'https://github.com/theHARI962n/RTALearn.git'
             }
         }
 
-        stage('Backend Build & Test') {
+        stage('Install Frontend Dependencies') {
             steps {
-                echo "Backend: Building with Docker Node container"
-                sh """
-                docker run --rm -v $REPO_DIR/backend:/app -w /app node:18 \
-                bash -c "npm install && npm run test"
-                """
+                dir("${FRONTEND_DIR}") {
+                    sh 'npm install'
+                }
             }
         }
 
-        stage('Frontend Build & Test') {
+        stage('Build Frontend') {
             steps {
-                echo "Frontend: Building with Docker Node container"
-                sh """
-                docker run --rm -v $REPO_DIR/frontend:/app -w /app node:18 \
-                bash -c "npm install && npm run build"
-                """
+                dir("${FRONTEND_DIR}") {
+                    sh 'npm run build'
+                }
             }
         }
+
+        stage('Install Backend Dependencies') {
+            steps {
+                dir("${BACKEND_DIR}") {
+                    sh 'npm install'
+                }
+            }
+        }
+
+        stage('Run Backend Tests') {
+            steps {
+                dir("${BACKEND_DIR}") {
+                    // Add your test script here later
+                    sh 'echo "No backend tests yet"'
+                }
+            }
+        }
+
     }
 
     post {
-        always {
-            echo "CI Pipeline finished"
-        }
         success {
-            echo "Build succeeded!"
+            echo "✅ Build completed successfully!"
         }
         failure {
-            echo "Build failed!"
+            echo "❌ Build failed!"
         }
     }
 }
