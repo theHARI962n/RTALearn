@@ -44,6 +44,26 @@ export const getVideos = async (req, res) => {
   }
 };
 
+// @desc Update video (Admin only)
+export const updateVideo = async (req, res) => {
+  try {
+    const { videoId } = req.params;
+    const { title, url } = req.body;
+
+    const video = await Video.findById(videoId);
+    if (!video) return res.status(404).json({ message: "Video not found" });
+
+    video.title = title || video.title;
+    video.url = url || video.url;
+
+    await video.save();
+    res.json(video);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+
 // @desc Delete video (Admin only)
 export const deleteVideo = async (req, res) => {
   try {

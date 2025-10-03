@@ -1,8 +1,18 @@
 import { useState } from "react";
 import { Menu, ChevronLeft, Home, BookOpen, UserPlus, Bell, Calendar, UserCircle } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 export default function Sidebar({ activePage, setActivePage }) {
   const [isCollapsed, setIsCollapsed] = useState(false);
+  const navigate = useNavigate();
+
+
+    const handleLogout = () => {
+      localStorage.removeItem("token"); // remove JWT
+      navigate("/"); // redirect to landing page
+    };
+
+
 
   const navItems = [
     { key: "dashboard", label: "Dashboard", icon: <Home size={20} /> },
@@ -50,7 +60,8 @@ export default function Sidebar({ activePage, setActivePage }) {
         ))}
 
         {/* Logout */}
-        <button className="flex items-center gap-2 text-gray-700 hover:text-red-600 mt-auto">
+        <button onClick={handleLogout}
+          className="flex items-center gap-2 text-gray-700 hover:text-red-600 mt-auto">
           {isCollapsed ? "⏻" : <>⏻ Logout</>}
         </button>
       </nav>

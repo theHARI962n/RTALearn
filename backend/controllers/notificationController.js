@@ -1,6 +1,40 @@
 import Notification from "../models/Notification.js";
 import Course from "../models/Course.js";
 
+// @desc Add a video to course (Admin only) — updated
+export const addVideo = async (req, res) => {
+  try {
+    const { title, url } = req.body;
+    const { courseId } = req.params;
+
+    const course = await Course.findById(courseId).populate("students");
+    if (!course) return res.status(404).json({ message: "Course not found" });
+
+    const video = await Video.create({ title, url, courseId });
+
+    // link video to course
+    course.videos.push(video._id);
+    await course.save();
+
+    // --- Create notification for all enrolled students ---
+    if (course.students.length > 0) {
+      const message = `New video added: "${title}" in course "${course.title}"`;
+      await Notification.create({
+        courseId,
+        message,
+        createdBy: req.user._id,
+        recipients: course.students.map(s => s._id), // all enrolled students
+      });
+    }
+
+    res.status(201).json(video);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+
+
 // @desc Send notification (Admin only)
 export const sendNotification = async (req, res) => {
   try {

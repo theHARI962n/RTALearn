@@ -8,14 +8,15 @@ import videoRoutes from "./routes/videoRoutes.js";
 import attendanceRoutes from "./routes/attendanceRoutes.js";
 import notificationRoutes from "./routes/notificationRoutes.js";
 import profileRoutes from "./routes/profileRoutes.js";
+import userRoutes from "./routes/userRoutes.js";
 
 dotenv.config();
 
 const app = express();
-
+app.use(cors());
 // Middleware
 app.use(express.json());
-app.use(cors());
+
 
 
 // Routes
@@ -25,7 +26,7 @@ app.use("/api/videos", videoRoutes);
 app.use("/api/attendance", attendanceRoutes);
 app.use("/api/notifications", notificationRoutes);
 app.use("/api/profile", profileRoutes);
-
+app.use("/api/users", userRoutes);
 
 // Simple test route
 app.get("/", (req, res) => {

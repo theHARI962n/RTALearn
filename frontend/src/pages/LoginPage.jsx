@@ -1,54 +1,84 @@
-export default function LoginPage() {
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
+import api from "../api/axios";
+import toast from "react-hot-toast";
+import { FiEye, FiEyeOff } from "react-icons/fi";
+
+export default function Login() {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false); 
+  const [error, setError] = useState("");
+  const { login } = useAuth();
+  const navigate = useNavigate();
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const { data } = await api.post("/auth/login", { email, password });
+  
+      // Save token in context
+      login(data.token);
+
+      toast.success("Login successful!");
+  
+      // Redirect based on role (data.role, not data.user.role)
+      if (data.role === "admin") {
+        navigate("/admin");
+      } else {
+        navigate("/dashboard");
+      }
+  
+    } catch (err) {
+      setError(err.response?.data?.message || "Login failed");
+    }
+  };
+  
+  
+
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-r from-pink-100 to-pink-200">
-      <div className="bg-white shadow-lg rounded-2xl p-10 w-full max-w-md">
-        <h2 className="text-3xl font-bold text-center text-pink-700 ">
-         Welcome Back
-        </h2>
-        <p className="text-gray-500 text-center mt-2 mb-6">Login to continue your journey</p>
-        <form className="space-y-5">
+    <div className="min-h-screen flex items-center justify-center bg-gray-100">
+      <div className="bg-white p-8 rounded-2xl shadow-lg w-96">
+        <h2 className="text-2xl font-bold text-center mb-6">Login</h2>
+
+        {error && <p className="text-red-500 text-sm mb-4">{error}</p>}
+
+        <form onSubmit={handleSubmit} className="space-y-4">
           <input
             type="email"
             placeholder="Email"
-            className="w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-400"
+            className="w-full px-4 py-2 border rounded-lg"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
           />
-          <input
-            type="password"
-            placeholder="Password"
-            className="w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-400"
-          />
-
+          {/* Password input with eye icon */}
+          <div className="relative">
+            <input
+              type={showPassword ? "text" : "password"} // 👈 toggle
+              placeholder="Password"
+              className="w-full px-4 py-2 border rounded-lg"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+            />
+            <span
+              className="absolute right-3 top-1/2 transform -translate-y-1/2 cursor-pointer text-gray-500"
+              onClick={() => setShowPassword((prev) => !prev)}
+            >
+              {showPassword ? <FiEyeOff /> : <FiEye />}
+            </span>
+          </div>
           <button
             type="submit"
-            className="w-full bg-pink-600 text-white py-3 rounded-lg hover:bg-pink-700 transition"
+            className="w-full bg-black text-white py-2 rounded-lg hover:bg-gray-800"
           >
             Login
           </button>
         </form>
 
-        {/* Divider */}
-        <div className="flex items-center my-6">
-          <hr className="flex-grow border-gray-300" />
-          <span className="px-3 text-gray-500">OR</span>
-          <hr className="flex-grow border-gray-300" />
-        </div>
-
-        {/* Google OAuth */}
-        <button
-          type="button"
-          className="w-full flex items-center justify-center gap-3 border border-gray-300 py-3 rounded-lg hover:bg-gray-50 transition"
-        >
-          <img
-            src="https://www.svgrepo.com/show/355037/google.svg"
-            alt="Google"
-            className="w-5 h-5"
-          />
-          <span className="text-gray-700 font-medium">Continue with Google</span>
-        </button>
-
-        <p className="mt-6 text-center text-gray-600">
+        <p className="text-sm text-center mt-4">
           Don’t have an account?{" "}
-          <a href="/register" className="text-pink-600 hover:underline">
+          <a href="/register" className="text-blue-600">
             Register
           </a>
         </p>

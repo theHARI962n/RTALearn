@@ -5,6 +5,7 @@ import JoinPage from "./JoinPage";
 import NotificationsPage from "./NotificationsPage";
 import AttendancePage from "./AttendancePage";
 import ProfilePage from "./ProfilePage";
+import MyCourses from "./MyCourses";
 
 export default function UserDashboard() {
   const [activePage, setActivePage] = useState("dashboard");
@@ -23,10 +24,11 @@ export default function UserDashboard() {
       {/* Main Content */}
       <main className="flex-1 p-10 overflow-y-auto">
         {activePage === "dashboard" && <DashboardTwo courses={courses} />}
-        {activePage === "join" && <JoinPage />}
+        {activePage === "join" && <JoinPage setActivePage={setActivePage}/>}
         {activePage === "notifications" && <NotificationsPage />}
         {activePage === "attendance" && <AttendancePage />}
         {activePage === "profile" && <ProfilePage />}
+        {activePage === "courses" && <MyCourses />}
       </main>
     </div>
   );

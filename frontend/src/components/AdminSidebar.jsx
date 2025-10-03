@@ -1,6 +1,17 @@
 import { Menu, ChevronLeft, Home, BookOpen, UserPlus, Bell, Calendar, User,UserCircle } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 export default function AdminSidebar({ activePage, setActivePage, isCollapsed, setIsCollapsed }) {
+
+  const navigate = useNavigate();
+
+
+    const handleLogout = () => {
+      localStorage.removeItem("token"); // remove JWT
+      navigate("/"); // redirect to landing page
+    };
+
+
   const navItems = [
     { key: "dashboard", label: "Dashboard", icon: <Home size={20} /> },
     { key: "courses", label: "Manage Courses", icon: <BookOpen size={20} /> },
@@ -42,7 +53,8 @@ export default function AdminSidebar({ activePage, setActivePage, isCollapsed, s
         ))}
 
         {/* Logout */}
-        <button className="text-left text-gray-700 hover:text-red-600 mt-auto flex items-center gap-2">
+        <button onClick={handleLogout}
+        className="text-left text-gray-700 hover:text-red-600 mt-auto flex items-center gap-2">
           {isCollapsed ? "⏻" : "Logout"}
         </button>
       </nav>

@@ -22,6 +22,63 @@ export const createCourse = async (req, res) => {
   }
 };
 
+// @desc Get all courses created by this admin
+export const getAdminCourses = async (req, res) => {
+  try {
+    const courses = await Course.find({ createdBy: req.user._id })
+      .populate("students", "name email")
+      .populate("videos");
+
+    res.json(courses);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+// @desc Update a course (Admin only)
+export const updateCourse = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { title, description } = req.body;
+
+    const course = await Course.findOneAndUpdate(
+      { _id: id, createdBy: req.user._id }, // only allow editing own course
+      { title, description },
+      { new: true }
+    );
+
+    if (!course) {
+      return res.status(404).json({ message: "Course not found or not authorized" });
+    }
+
+    res.json(course);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+// @desc Delete a course (Admin only)
+export const deleteCourse = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const course = await Course.findOneAndDelete({
+      _id: id,
+      createdBy: req.user._id, // only allow deleting own course
+    });
+
+    if (!course) {
+      return res.status(404).json({ message: "Course not found or not authorized" });
+    }
+
+    res.json({ message: "Course deleted successfully" });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+
+
 // @desc Get all courses (any user)
 export const getCourses = async (req, res) => {
   try {
@@ -51,8 +108,10 @@ export const joinCourse = async (req, res) => {
 
     // also add course to student's list
     const student = await User.findById(req.user._id);
-    student.enrolledCourses.push(course._id);
-    await student.save();
+    if (!student.enrolledCourses.includes(course._id)) {
+      student.enrolledCourses.push(course._id);
+      await student.save();
+    }
 
     res.json({ message: "Successfully joined course", course });
   } catch (error) {
